@@ -1,0 +1,15 @@
+Flowpack.Neos.AssetUsage:AssetUsageService:
+  className: Flowpack\EntityUsage\Service\EntityUsageService
+  scope: singleton
+  arguments:
+    1:
+      value: 'neos_cr'
+
+Flowpack.Neos.AssetUsage:Logger:
+  className: Psr\Log\LoggerInterface
+  scope: singleton
+  factoryObjectName: Neos\Flow\Log\PsrLoggerFactoryInterface
+  factoryMethodName: get
+  arguments:
+    1:
+      value: systemLogger

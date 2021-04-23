@@ -1,0 +1,20 @@
+{
+    "name": "flowpack/neos-asset-usage",
+    "description": "Provides an asset usage service for the Neos CMS",
+    "license": "GPL-3.0-or-later",
+    "type": "neos-package",
+    "require": {
+        "neos/neos": "^5.2 || ^7.0 || dev-master",
+        "flowpack/entity-usage": "^1.0 || dev-main || dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flowpack\\Neos\\AssetUsage\\": "Classes"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Flowpack.Neos.AssetUsage"
+        }
+    }
+}
