@@ -46,6 +46,11 @@ When that happens, it is important that you try to find out where they come from
 If you think this happened due to an error in this package, please open an issue 
 with as much information as you can give.
 
+## Related packages
+
+* [Flowpack.EntityUsage](https://github.com/Flowpack/Flowpack.EntityUsage) the generic usage implementation
+* [Flowpack.EntityUsage.DatabaseStorage](https://github.com/Flowpack/Flowpack.EntityUsage.DatabaseStorage) for storing usages in the database
+
 ## Development goal
 
 This functionality will at some point be integrated into the core of a future Neos CMS version.
