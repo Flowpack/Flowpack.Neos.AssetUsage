@@ -21,10 +21,9 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\Doctrine\PersistenceManager;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\AssetInterface;
+use Neos\Media\Domain\Model\AssetVariantInterface;
 use Neos\Media\Domain\Model\ImageInterface;
-use Neos\Media\Domain\Model\ResourceBasedInterface;
 use Neos\Neos\Controller\CreateContentContextTrait;
-use Neos\Utility\Exception\PropertyNotAccessibleException;
 
 /**
  * Monitors changes to assets which are used in Neos CR nodes
@@ -56,8 +55,22 @@ final class AssetIntegrationService
 
     private function unregisterUsageForAsset(AssetInterface $asset): void
     {
-        $assetId = $this->persistenceManager->getIdentifierByObject($asset);
+        $assetId = $this->resolveOriginalAssetIdentifier($asset);
         $this->assetUsageService->unregisterUsagesByEntity($assetId);
+    }
+
+    /**
+     * Returns the assets identifier or in case of variants the original assets identifier
+     *
+     * @param AssetInterface|ImageInterface $asset
+     * @return string|null
+     */
+    private function resolveOriginalAssetIdentifier($asset): ?string
+    {
+        if ($asset instanceof AssetVariantInterface) {
+            $asset = $asset->getOriginalAsset();
+        }
+        return $this->persistenceManager->getIdentifierByObject($asset);
     }
 
     public function afterNodePublishing(NodeInterface $node): void
@@ -137,12 +150,8 @@ final class AssetIntegrationService
         string $workspaceName,
         $asset
     ): ?string {
-        if ($asset instanceof ResourceBasedInterface) {
-            try {
-                $assetId = $this->persistenceManager->getIdentifierByObject($asset);
-            } catch (PropertyNotAccessibleException $e) {
-                return null;
-            }
+        if ($asset instanceof AssetInterface || $asset instanceof ImageInterface) {
+            $assetId = $this->resolveOriginalAssetIdentifier($asset);
         } else {
             $assetId = $asset;
         }
@@ -212,7 +221,7 @@ final class AssetIntegrationService
                     $referencedAssets = [$referencedAssets];
                 }
                 foreach ($referencedAssets as $referencedAsset) {
-                    $referenceId = $this->persistenceManager->getIdentifierByObject($referencedAsset);
+                    $referenceId = $this->resolveOriginalAssetIdentifier($referencedAsset);
                     $carry[$referenceId] = ($carry[$referenceId] ?? 0) + 1;
                 }
                 return $carry;
@@ -220,10 +229,13 @@ final class AssetIntegrationService
         }
 
         foreach ($assets as $asset) {
-            $assetId = $this->persistenceManager->getIdentifierByObject($asset);
+            $assetId = $this->resolveOriginalAssetIdentifier($asset);
             // Remove the usage only if it will not be used anymore
-            if (!$checkAllReferences || !$references || !array_key_exists($references,
-                    $assetId) || $references[$assetId] === 1) {
+            if (!$checkAllReferences ||
+                !$references ||
+                !array_key_exists($assetId, $references) ||
+                $references[$assetId] === 1
+            ) {
                 $this->assetUsageService->unregisterUsage(
                     $this->getUsageId($node->getIdentifier(), $node->getDimensions(),
                         $node->getWorkspace()->getName()

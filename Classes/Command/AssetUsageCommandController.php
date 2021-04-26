@@ -23,6 +23,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Cli\CommandController;
 use Neos\Flow\Persistence\Doctrine\PersistenceManager;
 use Neos\Media\Domain\Model\AssetInterface;
+use Neos\Media\Domain\Model\AssetVariantInterface;
 use Neos\Media\Domain\Repository\AssetRepository;
 use Psr\Log\LoggerInterface;
 
@@ -144,7 +145,10 @@ class AssetUsageCommandController extends CommandController
                 }
 
                 foreach ($assetIds as $assetId) {
-                    if (!is_string($assetId)) {
+                    if ($assetId instanceof AssetInterface) {
+                        if ($assetId instanceof AssetVariantInterface) {
+                            $assetId = $assetId->getOriginalAsset();
+                        }
                         $assetId = $this->persistenceManager->getIdentifierByObject($assetId);
                     }
 
@@ -171,7 +175,6 @@ class AssetUsageCommandController extends CommandController
                         $workspace,
                         $assetId
                     );
-                    $knownUsages[$usageId] = $assetId;
 
                     $rowsAdded[] = [
                         $usageId,
