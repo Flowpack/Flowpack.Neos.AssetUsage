@@ -48,7 +48,7 @@ class AssetUsageInNodePropertiesStrategy implements AssetUsageStrategyInterface
 
     public function getLabel(): string
     {
-        return 'Neos documents and content (new awesome instant strategy)';
+        return 'Neos documents and content';
     }
 
     /**
