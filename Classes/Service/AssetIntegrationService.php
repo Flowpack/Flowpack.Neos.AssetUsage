@@ -24,6 +24,7 @@ use Neos\Media\Domain\Model\AssetInterface;
 use Neos\Media\Domain\Model\AssetVariantInterface;
 use Neos\Media\Domain\Model\ImageInterface;
 use Neos\Neos\Controller\CreateContentContextTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Monitors changes to assets which are used in Neos CR nodes
@@ -45,6 +46,12 @@ final class AssetIntegrationService
      * @var EntityUsageService
      */
     protected $assetUsageService;
+
+    /**
+     * @Flow\Inject(name="Flowpack.Neos.AssetUsage:Logger")
+     * @var LoggerInterface
+     */
+    protected $assetUsageLogger;
 
     private $assetPropertiesByNodeType = [];
 
