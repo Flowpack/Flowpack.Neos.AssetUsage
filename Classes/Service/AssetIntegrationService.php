@@ -75,6 +75,10 @@ final class AssetIntegrationService
 
     public function afterNodePublishing(NodeInterface $node): void
     {
+        // Skip usage in removed nodes
+        if ($node->isRemoved()) {
+            return;
+        }
         foreach ($this->getAssetPropertyNamesForNodeType($node->getNodeType()) as $propertyName) {
             if (!$node->hasProperty($propertyName)) {
                 return;
