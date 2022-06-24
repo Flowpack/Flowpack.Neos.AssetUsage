@@ -1,7 +1,7 @@
 # Asset usage tracking for Neos CMS
 
 This package provides a replacement for the asset usage calculation
-in [Neos CMS](https://www.neos.io) 5.x and 7.x.
+in [Neos CMS](https://www.neos.io) 5.x, 7.x and 8.x.
 
 Neos always calculated the asset usage when the information was requested. 
 This could take quite long depending on the number of nodes and assets in a project.
@@ -23,7 +23,7 @@ like filtering for unused assets and delete button are disabled if an asset is u
 
 ## Compatibility
 
-Neos 5.2 + Neos 7.x
+Neos 5.2, Neos 7.x + Neos 8.x
 
 ## Installation
 
