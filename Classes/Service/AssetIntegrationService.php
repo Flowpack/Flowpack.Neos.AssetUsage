@@ -202,7 +202,9 @@ final class AssetIntegrationService
             // Unregister the asset stored in the target node, the assets will be registered again after publishing
             if ($targetNode && $targetNode->hasProperty($propertyName)) {
                 $targetPropertyValue = $targetNode->getProperty($propertyName);
-                $this->unregisterUsageInNode($targetNode, $targetPropertyValue, false);
+                if ($targetPropertyValue) {
+                    $this->unregisterUsageInNode($targetNode, $targetPropertyValue, false);
+                }
             }
             $this->unregisterUsageInNode($node, $propertyValue, false);
         }
