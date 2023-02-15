@@ -29,13 +29,17 @@ Neos 5.2, Neos 7.x + Neos 8.x
 
 Add the package, and the storage as dependency in your site package:
 
-    composer require --no-update flowpack/neos-asset-usage flowpack/entity-usage-databasestorage
+```bash
+composer require --no-update flowpack/neos-asset-usage flowpack/entity-usage-databasestorage
+```
 
 The run `composer update` in your project root.
 
 Finally you need to run the command to build the initial usage index:
 
-    ./flow assetusage:update
+```bash
+./flow assetusage:update
+```
 
 This will store all usages in your database. If you deploy your project
 on another system you have to make sure that you run this command there.
@@ -51,7 +55,8 @@ with as much information as you can give.
 Possible use case: If you are using this package in combination with [neos/metadata-contentrepositoryadapter](https://github.com/neos/metadata-contentrepositoryadapter), the metadata entries will be recognized as usage count. You can adjust this behaviour with the following settings.
 
 Example to exclude all metadata node types from usage count:
-```
+
+```yaml
 Flowpack:
   Neos:
     AssetUsage:
@@ -60,7 +65,8 @@ Flowpack:
 ```
 
 Example to exclude multiple custom metadata node types:
-```
+
+```yaml
 Flowpack:
   Neos:
     AssetUsage:
