@@ -1,0 +1,4 @@
+Flowpack:
+  Neos:
+    AssetUsage:
+      excludedNodeTypes: []

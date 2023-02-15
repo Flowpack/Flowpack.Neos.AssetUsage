@@ -46,6 +46,29 @@ When that happens, it is important that you try to find out where they come from
 If you think this happened due to an error in this package, please open an issue 
 with as much information as you can give.
 
+## Feature: Exclude node types from usage count
+
+Possible use case: If you are using this package in combination with [neos/metadata-contentrepositoryadapter](https://github.com/neos/metadata-contentrepositoryadapter), the metadata entries will be recognized as usage count. You can adjust this behaviour with the following settings.
+
+Example to exclude all metadata node types from usage count:
+```
+Flowpack:
+  Neos:
+    AssetUsage:
+      excludedNodeTypes:
+        - 'Neos.MetaData:AbstractMetaData'
+```
+
+Example to exclude multiple custom metadata node types:
+```
+Flowpack:
+  Neos:
+    AssetUsage:
+      excludedNodeTypes:
+        - 'Vendor.PackageName:Custom.MetaData.NodeType1'
+        - 'Vendor.PackageName:Custom.MetaData.NodeType2'
+```
+
 ## Related packages
 
 * [Flowpack.EntityUsage](https://github.com/Flowpack/Flowpack.EntityUsage) the generic usage implementation
