@@ -53,6 +53,12 @@ final class AssetIntegrationService
      */
     protected $assetUsageLogger;
 
+    /**
+     * @Flow\InjectConfiguration(path="excludedNodeTypes")
+     * @var array
+     */
+    protected $excludedNodeTypes;
+
     private $assetPropertiesByNodeType = [];
 
     public function assetRemoved(AssetInterface $asset): void
@@ -102,6 +108,13 @@ final class AssetIntegrationService
     {
         if (array_key_exists($nodeType->getName(), $this->assetPropertiesByNodeType)) {
             return $this->assetPropertiesByNodeType[$nodeType->getName()];
+        }
+
+        foreach ($this->excludedNodeTypes as $excludedNodeType) {
+            if ($nodeType->isOfType($excludedNodeType)) {
+                $this->assetPropertiesByNodeType[$nodeType->getName()] = [];
+                return [];
+            }
         }
 
         $propertyNames = array_reduce(array_keys($nodeType->getProperties()),
