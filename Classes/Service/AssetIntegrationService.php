@@ -205,19 +205,20 @@ final class AssetIntegrationService
         $targetNode = $contentContext->getNodeByIdentifier($node->getIdentifier());
 
         foreach ($this->getAssetPropertyNamesForNodeType($node->getNodeType()) as $propertyName) {
-            if (!$node->hasProperty($propertyName)) {
-                return;
-            }
-            $propertyValue = $node->getProperty($propertyName);
-            if (!$propertyValue) {
-                return;
-            }
             // Unregister the asset stored in the target node, the assets will be registered again after publishing
             if ($targetNode && $targetNode->hasProperty($propertyName)) {
                 $targetPropertyValue = $targetNode->getProperty($propertyName);
                 if ($targetPropertyValue) {
                     $this->unregisterUsageInNode($targetNode, $targetPropertyValue, false);
                 }
+            }
+
+            if (!$node->hasProperty($propertyName)) {
+                return;
+            }
+            $propertyValue = $node->getProperty($propertyName);
+            if (!$propertyValue) {
+                return;
             }
             $this->unregisterUsageInNode($node, $propertyValue, false);
         }
@@ -309,11 +310,15 @@ final class AssetIntegrationService
      */
     public function nodePropertyChanged(NodeInterface $node, string $propertyName, $oldValue, $newValue): void
     {
+        if ($this->propertyTypeCanBeRegistered($node->getNodeType()->getPropertyType($propertyName)) && $oldValue && empty($newValue)) {
+            $this->unregisterUsageInNode($node, $oldValue);
+        }
+
         if ($oldValue === $newValue || !$this->propertyTypeCanBeRegistered($node->getNodeType()->getPropertyType($propertyName))) {
             return;
         }
 
-        if ($oldValue) {
+        if ($oldValue && $newValue) {
             $this->unregisterUsageInNode($node, $oldValue);
         }
 
