@@ -217,7 +217,7 @@ final class AssetIntegrationService
                 return;
             }
             $propertyValue = $node->getProperty($propertyName);
-            if (!$propertyValue) {
+            if (empty($propertyValue)) {
                 return;
             }
             $this->unregisterUsageInNode($node, $propertyValue, false);
@@ -310,15 +310,11 @@ final class AssetIntegrationService
      */
     public function nodePropertyChanged(NodeInterface $node, string $propertyName, $oldValue, $newValue): void
     {
-        if ($this->propertyTypeCanBeRegistered($node->getNodeType()->getPropertyType($propertyName)) && $oldValue && empty($newValue)) {
-            $this->unregisterUsageInNode($node, $oldValue);
-        }
-
         if ($oldValue === $newValue || !$this->propertyTypeCanBeRegistered($node->getNodeType()->getPropertyType($propertyName))) {
             return;
         }
 
-        if ($oldValue && $newValue) {
+        if ($oldValue) {
             $this->unregisterUsageInNode($node, $oldValue);
         }
 
