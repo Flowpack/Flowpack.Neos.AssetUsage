@@ -16,6 +16,7 @@ namespace Flowpack\Neos\AssetUsage;
 use Flowpack\Neos\AssetUsage\Service\AssetIntegrationService;
 use Neos\ContentRepository\Domain\Model\Node;
 use Neos\ContentRepository\Domain\Model\Workspace;
+use Neos\Neos\Service\PublishingService;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Package\Package as BasePackage;
 use Neos\Media\Domain\Service\AssetService;
@@ -31,7 +32,7 @@ class Package extends BasePackage
         $dispatcher->connect(Node::class, 'nodePropertyChanged', AssetIntegrationService::class, 'nodePropertyChanged');
         $dispatcher->connect(Node::class, 'nodeRemoved', AssetIntegrationService::class, 'nodeRemoved');
         $dispatcher->connect(Node::class, 'nodeAdded', AssetIntegrationService::class, 'nodeAdded');
-        $dispatcher->connect(Node::class, 'nodeDiscarded', AssetIntegrationService::class, 'nodeDiscarded');
+        $dispatcher->connect(PublishingService::class, 'nodeDiscarded', AssetIntegrationService::class, 'nodeDiscarded');
         $dispatcher->connect(Workspace::class, 'beforeNodePublishing', AssetIntegrationService::class, 'beforeNodePublishing');
         $dispatcher->connect(Workspace::class, 'afterNodePublishing', AssetIntegrationService::class, 'afterNodePublishing');
 
