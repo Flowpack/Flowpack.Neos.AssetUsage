@@ -113,6 +113,8 @@ class AssetUsageCommandController extends CommandController
 
         $rowsAdded = [];
 
+        $errors = [];
+
         $this->output->progressStart($this->nodeDataRepository->countAll());
 
         /** @var NodeData $nodeData */
@@ -147,7 +149,16 @@ class AssetUsageCommandController extends CommandController
                 foreach ($assetIds as $assetId) {
                     if ($assetId instanceof AssetInterface) {
                         if ($assetId instanceof AssetVariantInterface) {
-                            $assetId = $assetId->getOriginalAsset();
+                            try {
+                                $assetId = $assetId->getOriginalAsset();
+                            } catch (\Exception $e) {
+                                $errors[] = [
+                                    'node identifier' => $nodeData->getIdentifier(),
+                                    'property' => $assetPropertyName,
+                                    'exception message' => $e->getMessage(),
+                                ];
+                                continue;
+                            }
                         }
                         $assetId = $this->persistenceManager->getIdentifierByObject($assetId);
                     }
@@ -243,6 +254,15 @@ class AssetUsageCommandController extends CommandController
             ]);
         } else {
             $this->outputLine('No usages were removed');
+        }
+
+        if ($errors) {
+            $this->outputLine('Some asset reference errors occured. Please check the asset references in the database.');
+            $this->output->outputTable($errors, [
+                'NodeIdentifier',
+                'Property',
+                'Exception message',
+            ]);
         }
 
         $this->assetUsageLogger->info(sprintf('Finished updating asset usage index. Added %d usages. Removed %d usages.', count($rowsAdded), count($rowsRemoved)));
