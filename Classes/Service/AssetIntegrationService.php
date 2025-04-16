@@ -94,11 +94,11 @@ final class AssetIntegrationService
         }
         foreach ($this->getAssetPropertyNamesForNodeType($node->getNodeType()) as $propertyName) {
             if (!$node->hasProperty($propertyName)) {
-                return;
+                continue;
             }
             $propertyValue = $node->getProperty($propertyName);
             if (!$propertyValue) {
-                return;
+                continue;
             }
             $this->registerUsageInNode($node, $propertyValue);
         }
@@ -214,11 +214,11 @@ final class AssetIntegrationService
             }
 
             if (!$node->hasProperty($propertyName)) {
-                return;
+                continue;
             }
             $propertyValue = $node->getProperty($propertyName);
             if (empty($propertyValue)) {
-                return;
+                continue;
             }
             $this->unregisterUsageInNode($node, $propertyValue, false);
         }
@@ -280,7 +280,7 @@ final class AssetIntegrationService
     {
         foreach ($this->getAssetPropertyNamesForNodeType($node->getNodeType()) as $propertyName) {
             if (!$node->hasProperty($propertyName)) {
-                return;
+                continue;
             }
             $propertyValue = $node->getProperty($propertyName);
             if ($propertyValue) {
@@ -293,7 +293,7 @@ final class AssetIntegrationService
     {
         foreach ($this->getAssetPropertyNamesForNodeType($node->getNodeType()) as $propertyName) {
             if (!$node->hasProperty($propertyName)) {
-                return;
+                continue;
             }
             $propertyValue = $node->getProperty($propertyName);
             if ($propertyValue) {
