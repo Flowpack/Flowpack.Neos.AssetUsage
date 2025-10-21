@@ -1,7 +1,13 @@
-# Asset usage tracking for Neos CMS
+# Asset usage tracking for Neos CMS ( <= 8.x)
 
-This package provides a replacement for the asset usage calculation
+This package provides a more performant replacement for the asset usage calculation
 in [Neos CMS](https://www.neos.io) 5.x, 7.x and 8.x.
+
+**In Neos >= 9.0, highly performant asset usage is included in the core, you do NOT need this package anymore then.**
+
+> **Upgrading to Neos 9**
+> - remove the dependency to `flowpack/neos-asset-usage`
+> - there is no step 2 - that's it 🙂
 
 Neos always calculated the asset usage when the information was requested. 
 This could take quite long depending on the number of nodes and assets in a project.
